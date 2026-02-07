@@ -34,7 +34,7 @@ pipeline {
             steps{
                 script{
                     docker_compose()
-                    echo 'Finished...'
+                    echo 'Finish the process...'
                 }
             }
         }
