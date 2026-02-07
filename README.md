@@ -21,8 +21,7 @@ docker build -t django-notes-app .
 ```
 docker run -d -p 8000:8000 django-notes-app:latest
 ```
-## Author
-Krish Chaudhari
+
 
 ## Nginx
 
@@ -30,3 +29,7 @@ Install Nginx reverse proxy to make this application available
 
 `sudo apt-get update`
 `sudo apt install nginx`
+
+## Author
+
+Krish Chaudhari
