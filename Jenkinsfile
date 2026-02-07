@@ -1,39 +1,43 @@
+@Library('Shared') _
 pipeline {
     agent {label 'krish'}
     stages {
-        stage('code') {
-            steps {
-                echo 'cloning the code'
-                git url: "https://github.com/LondheShubham153/django-notes-app.git", branch: "main"
-                echo 'Cloning successfull.'
+        stage('Hello') {
+            steps{
+                script{
+                    hello()
+                }
             }
         }
-        stage('build') {
-            steps {
-                sh 'git clean -fdx'
-                echo 'build the code'
-                sh 'docker build -t django-notes-app:latest .'
-                echo 'Image build successfull.'
+        stage('Code') {
+            steps{
+                script{
+                    clone("https://github.com/LondheShubham153/django-notes-app.git","main")
+                }
             }
         }
-        stage('Pushing the image to DockerHub') {
-            steps {
-                  withCredentials([usernamePassword(
-                    credentialsId:"dockerhubcred",
-                    usernameVariable:"dockerhubuser", 
-                    passwordVariable:"dockerhubpass")]){
-                echo 'pushing the image to DockerHub'
-                sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
-                sh "docker image tag django-notes-app:latest ${env.dockerhubuser}/django-notes-app:latest"
-                sh "docker push ${env.dockerhubuser}/django-notes-app:latest"
-            }
+        stage('build'){
+            steps{
+                script{
+                    build('django-notes-app','latest','krc56')
+                }
             }
         }
-        stage('deploy') {
-            steps {
-               echo 'deploy the image'
-               sh 'docker compose up -d'
+        stage('push to DockerHub') {
+            steps{
+                script{
+                    docker_push('django-notes-app','latest','krc56')
+                }
+            }
+        }
+        stage('Deploy') {
+            steps{
+                script{
+                    docker_compose()
+                    echo 'Finished...'
+                }
             }
         }
     }
+              
 }
